@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../state/feed_provider.dart';
 import '../../../core/constants/feed_sources.dart';
 import '../../../ui/theme/app_theme.dart';
@@ -8,6 +9,7 @@ import 'widgets/category_tab_bar.dart';
 import '../../../ui/widgets/offline_banner.dart';
 import '../../../state/feed_provider.dart';
 import '../../../ui/widgets/rabbit_hole_card.dart';
+import '../../../ui/widgets/exchange_rate_card.dart';
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -93,6 +95,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 8),
             // Offline banner
             const OfflineBanner(),
+            // Update banner
+            const _UpdateBanner(),
             // Feed list
             Expanded(
               child: feedState.when(
@@ -153,55 +157,50 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       : Consumer(
                           builder: (context, ref, _) {
                             final rabbitHole = ref.watch(rabbitHoleProvider);
+                            final selectedCategory = ref.watch(selectedCategoryProvider);
+                            final showRates = selectedCategory == 'nigeria';
+
+                            int topItems = 0;
+                            if (rabbitHole != null) topItems += 2; // card + divider
+                            if (showRates) topItems += 1;
 
                             return ListView.builder(
                               controller: _scrollController,
                               padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-                              itemCount: articles.length +
-                                  (rabbitHole != null ? 2 : 1),
+                              itemCount: articles.length + topItems + 1,
                               itemBuilder: (context, index) {
-                                // First item — rabbit hole card
-                                if (rabbitHole != null && index == 0) {
+                                int offset = 0;
+
+                                // Exchange rate card — only on Nigeria tab, first item
+                                if (showRates && index == 0) {
+                                  return const ExchangeRateCard();
+                                }
+                                if (showRates) offset += 1;
+
+                                // Rabbit hole card
+                                if (rabbitHole != null && index == offset) {
                                   return RabbitHoleCard(article: rabbitHole);
                                 }
 
                                 // Divider after rabbit hole
-                                if (rabbitHole != null && index == 1) {
+                                if (rabbitHole != null && index == offset + 1) {
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 16),
                                     child: Row(
                                       children: [
-                                        Expanded(
-                                          child: Container(
-                                            height: 2,
-                                            color: AppColors.ink,
-                                          ),
-                                        ),
+                                        Expanded(child: Container(height: 2, color: AppColors.ink)),
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                          ),
-                                          child: Text(
-                                            'YOUR FEED',
-                                            style: AppTextStyles.label,
-                                          ),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                                          child: Text('YOUR FEED', style: AppTextStyles.label),
                                         ),
-                                        Expanded(
-                                          child: Container(
-                                            height: 2,
-                                            color: AppColors.ink,
-                                          ),
-                                        ),
+                                        Expanded(child: Container(height: 2, color: AppColors.ink)),
                                       ],
                                     ),
                                   );
                                 }
+                                if (rabbitHole != null) offset += 2;
 
-                                // Regular articles — offset index by rabbit hole + divider
-                                final offset = rabbitHole != null ? 2 : 0;
                                 final articleIndex = index - offset;
-
-                                // Loading spinner at end
                                 if (articleIndex == articles.length) {
                                   return const Padding(
                                     padding: EdgeInsets.symmetric(vertical: 24),
@@ -229,6 +228,79 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _UpdateBanner extends ConsumerWidget {
+  const _UpdateBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final updateState = ref.watch(updateProvider);
+
+    return updateState.maybeWhen(
+      data: (info) {
+        if (info == null || !info.hasUpdate) return const SizedBox.shrink();
+
+        return GestureDetector(
+          onTap: () async {
+            final uri = Uri.parse(info.downloadUrl);
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
+            }
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20, vertical: 12,
+            ),
+            color: AppColors.tech,
+            child: Row(
+              children: [
+                const Text('⬆️', style: TextStyle(fontSize: 14)),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'UPDATE AVAILABLE — v${info.latestVersion}',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1,
+                          color: AppColors.ink,
+                        ),
+                      ),
+                      if (info.releaseNotes.isNotEmpty)
+                        Text(
+                          info.releaseNotes,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.ink,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
+                  ),
+                ),
+                const Text(
+                  'TAP TO DOWNLOAD →',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.5,
+                    color: AppColors.ink,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

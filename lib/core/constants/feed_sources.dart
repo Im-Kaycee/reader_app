@@ -119,6 +119,39 @@ const List<FeedSource> kFeedSources = [
     url: 'https://www.channelstv.com/feed/',
     category: 'nigeria',
   ),
+  // More Tech
+  FeedSource(
+    id: 'techcabal',
+    displayName: 'TechCabal',
+    url: 'https://techcabal.com/feed/',
+    category: 'tech',
+  ),
+  FeedSource(
+    id: 'wired',
+    displayName: 'Wired',
+    url: 'https://www.wired.com/feed/rss',
+    category: 'tech',
+  ),
+  FeedSource(
+    id: 'mit_tech',
+    displayName: 'MIT Tech Review',
+    url: 'https://www.technologyreview.com/feed/',
+    category: 'tech',
+  ),
+
+  // More Nigeria
+  FeedSource(
+    id: 'techcabal_ng',
+    displayName: 'TechCabal NG',
+    url: 'https://techcabal.com/feed/',
+    category: 'nigeria',
+  ),
+  FeedSource(
+    id: 'nairametrics',
+    displayName: 'Nairametrics',
+    url: 'https://nairametrics.com/feed/',
+    category: 'nigeria',
+  ),
 ];
 
 

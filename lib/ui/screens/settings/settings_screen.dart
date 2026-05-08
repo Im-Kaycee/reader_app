@@ -11,6 +11,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mutedSources = ref.watch(mutedSourcesProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     // Group feeds by category
     final grouped = <String, List<FeedSource>>{};
@@ -45,6 +46,55 @@ class SettingsScreen extends ConsumerWidget {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
                 children: [
+                  // Theme selector
+                  const Text('APPEARANCE', style: AppTextStyles.label),
+                  const SizedBox(height: 12),
+                  BrutCard(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Theme',
+                          style: Theme.of(context).brightness == Brightness.dark
+                              ? AppTextStyles.cardTitle.copyWith(color: AppColors.darkInk)
+                              : AppTextStyles.cardTitle,
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            _ThemeButton(
+                              label: 'LIGHT',
+                              icon: Icons.light_mode,
+                              selected: themeMode == ThemeMode.light,
+                              onTap: () => ref
+                                  .read(themeModeProvider.notifier)
+                                  .setMode(ThemeMode.light),
+                            ),
+                            const SizedBox(width: 8),
+                            _ThemeButton(
+                              label: 'DARK',
+                              icon: Icons.dark_mode,
+                              selected: themeMode == ThemeMode.dark,
+                              onTap: () => ref
+                                  .read(themeModeProvider.notifier)
+                                  .setMode(ThemeMode.dark),
+                            ),
+                            const SizedBox(width: 8),
+                            _ThemeButton(
+                              label: 'SYSTEM',
+                              icon: Icons.phone_android,
+                              selected: themeMode == ThemeMode.system,
+                              onTap: () => ref
+                                  .read(themeModeProvider.notifier)
+                                  .setMode(ThemeMode.system),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
                   ...grouped.entries.map((entry) {
                     final category = entry.key;
                     final sources = entry.value;
@@ -202,6 +252,68 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ThemeButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _ThemeButton({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final inkColor = isDark ? AppColors.darkInk : AppColors.ink;
+    final bgColor = isDark ? AppColors.darkBg : AppColors.cream;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: selected ? inkColor : bgColor,
+            border: Border.all(color: inkColor, width: 2),
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: AppColors.tech,
+                      offset: const Offset(3, 3),
+                      blurRadius: 0,
+                    ),
+                  ]
+                : null,
+          ),
+          child: Column(
+            children: [
+              Icon(
+                icon,
+                size: 18,
+                color: selected ? bgColor : inkColor,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                  color: selected ? bgColor : inkColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

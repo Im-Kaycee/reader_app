@@ -19,20 +19,25 @@ class BrutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final defaultBg = isDark ? AppColors.darkSurface : AppColors.white;
+    final defaultBorder = isDark ? AppColors.darkInk : AppColors.ink;
+    final shadowColor = isDark ? AppColors.darkInk : AppColors.ink;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: backgroundColor ?? AppColors.white,
+          color: backgroundColor ?? defaultBg,
           border: Border.all(
-            color: borderColor ?? AppColors.ink,
+            color: borderColor ?? defaultBorder,
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.ink,
+              color: shadowColor,
               offset: const Offset(4, 4),
-              blurRadius: 0,       // hard shadow — the whole vibe
+              blurRadius: 0,
             ),
           ],
         ),

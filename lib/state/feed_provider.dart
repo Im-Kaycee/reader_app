@@ -2,7 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../data/models/article.dart';
 import '../data/repositories/feed_repository.dart';
-
+import '../data/services/exchange_rate_service.dart';
+import 'package:flutter/material.dart';
+import '../data/services/update_service.dart';
 final feedRepositoryProvider = Provider<FeedRepository>((ref) {
   final repo = FeedRepository();
   ref.onDispose(() => repo.dispose());
@@ -212,4 +214,69 @@ final rabbitHoleProvider = Provider<Article?>((ref) {
   final index = seed % pool.length;
 
   return pool[index];
+});
+// --- Exchange Rates ---
+final exchangeRateProvider =
+    AsyncNotifierProvider<ExchangeRateNotifier, List<ExchangeRate>>(
+  ExchangeRateNotifier.new,
+);
+
+class ExchangeRateNotifier extends AsyncNotifier<List<ExchangeRate>> {
+  @override
+  Future<List<ExchangeRate>> build() async {
+    return ExchangeRateService().fetchRates();
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(
+      () => ExchangeRateService().fetchRates(),
+    );
+  }
+}
+// --- Theme ---
+final themeModeProvider =
+    StateNotifierProvider<ThemeModeNotifier, ThemeMode>(
+  (ref) => ThemeModeNotifier(),
+);
+
+class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  static const _boxName = 'prefs';
+  static const _themeKey = 'theme_mode';
+
+  ThemeModeNotifier() : super(ThemeMode.system) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    final box = await Hive.openBox(_boxName);
+    final saved = box.get(_themeKey, defaultValue: 'system') as String;
+    state = _fromString(saved);
+  }
+
+  Future<void> setMode(ThemeMode mode) async {
+    state = mode;
+    final box = await Hive.openBox(_boxName);
+    await box.put(_themeKey, _toString(mode));
+  }
+
+  ThemeMode _fromString(String s) {
+    switch (s) {
+      case 'light':  return ThemeMode.light;
+      case 'dark':   return ThemeMode.dark;
+      default:       return ThemeMode.system;
+    }
+  }
+
+  String _toString(ThemeMode m) {
+    switch (m) {
+      case ThemeMode.light:  return 'light';
+      case ThemeMode.dark:   return 'dark';
+      default:               return 'system';
+    }
+  }
+}
+// --- Update Check ---
+final updateProvider = FutureProvider<UpdateInfo?>((ref) async {
+  return UpdateService().checkForUpdate();
 });

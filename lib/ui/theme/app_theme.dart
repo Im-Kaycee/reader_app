@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  // Light mode
   static const cream    = Color(0xFFF5F0E8);
   static const ink      = Color(0xFF1A1A1A);
   static const white    = Color(0xFFFFFFFF);
   static const paper    = Color(0xFFEDE8DE);
 
+  // Dark mode
+  static const darkBg      = Color(0xFF0F0F0F);
+  static const darkSurface = Color(0xFF1A1A1A);
+  static const darkPaper   = Color(0xFF242424);
+  static const darkInk     = Color(0xFFF5F0E8);
+
+  // Category accents — same in both modes
   static const tech     = Color(0xFF00C896);
   static const security = Color(0xFFFF3B30);
   static const music    = Color(0xFF8B5CF6);
   static const culture  = Color(0xFFFFB800);
-  static const football = Color.fromARGB(255, 12, 32, 18);
-  static const general  = Color(0xFF555555); // dark gray — visible text
-static const nigeria = Color(0xFF008751); // Nigerian green
+  static const football = Color(0xFF1A8F3C);
+  static const nigeria  = Color(0xFF008751);
+  static const general  = Color(0xFF555555);
+
   static Color forCategory(String category) {
     switch (category) {
       case 'tech':     return tech;
@@ -20,16 +29,14 @@ static const nigeria = Color(0xFF008751); // Nigerian green
       case 'music':    return music;
       case 'culture':  return culture;
       case 'football': return football;
-      case 'general':  return general;
       case 'nigeria':  return nigeria;
+      case 'general':  return general;
       default:         return ink;
     }
   }
 
-  // Returns black or white depending on which is more readable on the bg
   static Color labelColorFor(Color background) {
-    final luminance = background.computeLuminance();
-    return luminance > 0.4 ? ink : white;
+    return background.computeLuminance() > 0.4 ? ink : white;
   }
 }
 
@@ -38,7 +45,6 @@ class AppTextStyles {
     fontSize: 28,
     fontWeight: FontWeight.w900,
     letterSpacing: -0.5,
-    color: AppColors.ink,
     height: 1.1,
   );
 
@@ -46,7 +52,6 @@ class AppTextStyles {
     fontSize: 17,
     fontWeight: FontWeight.w800,
     letterSpacing: -0.3,
-    color: AppColors.ink,
     height: 1.25,
   );
 
@@ -54,13 +59,11 @@ class AppTextStyles {
     fontSize: 11,
     fontWeight: FontWeight.w700,
     letterSpacing: 1.2,
-    color: AppColors.ink,
   );
 
   static const body = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w400,
-    color: AppColors.ink,
     height: 1.6,
   );
 
@@ -72,7 +75,8 @@ class AppTextStyles {
 }
 
 class AppTheme {
-  static ThemeData get theme => ThemeData(
+  static ThemeData get light => ThemeData(
+    brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.cream,
     colorScheme: ColorScheme.light(
       primary: AppColors.ink,
@@ -83,13 +87,26 @@ class AppTheme {
       foregroundColor: AppColors.ink,
       elevation: 0,
       scrolledUnderElevation: 0,
-      titleTextStyle: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w900,
-        letterSpacing: -0.5,
-        color: AppColors.ink,
-      ),
     ),
     dividerColor: AppColors.ink,
   );
+
+  static ThemeData get dark => ThemeData(
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: AppColors.darkBg,
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.darkInk,
+      surface: AppColors.darkBg,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.darkBg,
+      foregroundColor: AppColors.darkInk,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+    ),
+    dividerColor: AppColors.darkInk,
+  );
+
+  // Keep this for backward compat
+  static ThemeData get theme => light;
 }
