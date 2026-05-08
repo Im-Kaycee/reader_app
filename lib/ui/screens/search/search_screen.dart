@@ -45,15 +45,24 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
-                decoration: const BoxDecoration(
-                  color: AppColors.white,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.darkSurface
+                      : AppColors.white,
                   border: Border.fromBorderSide(
-                    BorderSide(color: AppColors.ink, width: 2),
+                    BorderSide(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.darkInk
+                          : AppColors.ink,
+                      width: 2,
+                    ),
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.ink,
-                      offset: Offset(4, 4),
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.darkInk
+                          : AppColors.ink,
+                      offset: const Offset(4, 4),
                       blurRadius: 0,
                     ),
                   ],
@@ -61,19 +70,29 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 child: Row(
                   children: [
                     const SizedBox(width: 12),
-                    const Icon(Icons.search, color: AppColors.ink, size: 20),
+                    Icon(
+                      Icons.search,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.darkInk
+                          : AppColors.ink,
+                      size: 20,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: TextField(
+                      child: dartTextField(
                         controller: _controller,
                         autofocus: true,
-                        style: AppTextStyles.body,
-                        decoration: const InputDecoration(
+                        style: AppTextStyles.body.copyWith(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.darkInk
+                              : AppColors.ink,
+                        ),
+                        decoration: InputDecoration(
                           hintText: 'Search articles, sources...',
                           hintStyle: AppTextStyles.muted,
                           border: InputBorder.none,
                           isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 14),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 14),
                         ),
                         onChanged: (val) {
                           ref.read(searchQueryProvider.notifier).state = val;
@@ -86,10 +105,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           _controller.clear();
                           ref.read(searchQueryProvider.notifier).state = '';
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Icon(Icons.close,
-                              color: AppColors.ink, size: 18),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Icon(
+                            Icons.close,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? AppColors.darkInk
+                                : AppColors.ink,
+                            size: 18,
+                          ),
                         ),
                       ),
                   ],
