@@ -486,7 +486,7 @@
     }
 
     .feature-card:nth-child(3n) { border-right: none; }
-    .feature-card:nth-last-child(-n+3) { border-bottom: none; }
+    .feature-card:nth-last-child(-n+2) { border-bottom: none; }
 
     .feature-icon {
       width: 48px;
@@ -1012,6 +1012,16 @@
         <div class="feature-name">Material You</div>
         <p class="feature-desc">Modern design system that adapts to your system colors. Looks native on every Android device.</p>
       </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌙</div>
+        <div class="feature-name">Dark Mode</div>
+        <p class="feature-desc">Light, dark, or system — pick your theme in settings. Preference saved across restarts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💱</div>
+        <div class="feature-name">Exchange Rates</div>
+        <p class="feature-desc">Daily USD, GBP, EUR → Naira rates on the Nigeria tab. Official CBN rate, updated daily.</p>
+      </div>
     </div>
   </section>
 
@@ -1023,7 +1033,7 @@
       <div class="cat-card">
         <div class="cat-dot" style="background: var(--tech);"></div>
         <div class="cat-name">Tech</div>
-        <p class="cat-sources">Ars Technica, The Verge, 9to5Google</p>
+        <p class="cat-sources">Hacker News · Ars Technica<br>The Verge · Wired · MIT Tech Review · TechCabal</p>
         <span class="cat-count">01</span>
       </div>
       <div class="cat-card">
@@ -1047,7 +1057,7 @@
       <div class="cat-card">
         <div class="cat-dot" style="background: var(--nigeria);"></div>
         <div class="cat-name">Nigeria</div>
-        <p class="cat-sources">Punch, TheCable, Guardians</p>
+        <p class="cat-sources">Punch · Vanguard · The Cable<br>Premium Times · Channels TV · Nairametrics</p>
         <span class="cat-count">05</span>
       </div>
       <div class="cat-card">
@@ -1080,7 +1090,7 @@
       <div class="step">
         <div class="step-icon">3️⃣</div>
         <div class="step-title">Install</div>
-        <p class="step-desc">Find the APK in your downloads and tap to install. Android will verify the app.</p>
+        <p class="step-desc">Open your Downloads folder, tap <code>reader-v1.2.apk</code> and hit Install when prompted.</p>
         <div class="step-num">3</div>
       </div>
       <div class="step">
@@ -1093,13 +1103,13 @@
 
     <div class="download-box">
       <div class="download-info">
-        <div class="download-title">Ready?</div>
+        <div class="download-title">READER V1.2</div>
         <div class="download-meta">
-          <span>v1.0.0</span>
+          <span>v1.2.0</span>
           <span>19MB</span>
         </div>
       </div>
-      <a href="https://github.com/Im-Kaycee/reader_app/releases/latest/download/reader-v1.0.apk" class="btn-download-big">
+      <a href="https://github.com/Im-Kaycee/reader_app/releases/latest/download/reader-v1.2.apk" class="btn-download-big">
         ↓ Get Reader
       </a>
     </div>
@@ -1127,7 +1137,7 @@
     // Fetch download count from GitHub API
     async function updateDownloadCount() {
       try {
-        const response = await fetch('https://api.github.com/repos/Im-Kaycee/reader_app/releases/tags/v1.0.0');
+        const response = await fetch('https://api.github.com/repos/Im-Kaycee/reader_app/releases/tags/v1.2');
         const data = await response.json();
         
         if (data.assets && data.assets.length > 0) {
