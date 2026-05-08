@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reader — Your Personal Corner of the Internet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5F0E8;
+      --ink: #1A1A1A;
+      --white: #FFFFFF;
+      --paper: #EDE8DE;
+      --tech: #00C896;
+      --security: #FF3B30;
+      --music: #8B5CF6;
+      --football: #1A8F3C;
+      --nigeria: #008751;
+      --culture: #FFB800;
+      --shadow: 5px 5px 0px var(--ink);
+      --shadow-lg: 8px 8px 0px var(--ink);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 2px solid var(--ink);
+      position: sticky;
+      top: 0;
+      background: var(--cream);
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-download {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 10px 20px;
+      text-decoration: none;
+      box-shadow: 3px 3px 0 var(--tech);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .nav-download:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--tech);
+    }
+
+    .nav-download:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--tech);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 2px solid var(--ink);
+      overflow: hidden;
+    }
+
+    .hero-left {
+      padding: 60px 40px 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 2px solid var(--ink);
+      position: relative;
+    }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--ink);
+      padding: 6px 12px;
+      display: inline-block;
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 10vw, 130px);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      color: var(--tech);
+      -webkit-text-stroke: 2px var(--ink);
+    }
+
+    .hero-subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #555;
+      max-width: 420px;
+      margin-bottom: 40px;
+      margin-top: 16px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 16px 32px;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: transform 0.1s, box-shadow 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .btn-secondary {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: transparent;
+      border: 2px solid var(--ink);
+      padding: 16px 32px;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .btn-secondary:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: var(--shadow-lg);
+      background: var(--paper);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid var(--ink);
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* ── PHONE MOCKUP ── */
+    .hero-right {
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-right::before {
+      content: 'READER';
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 200px;
+      color: var(--ink);
+      opacity: 0.04;
+      letter-spacing: 10px;
+      white-space: nowrap;
+      transform: rotate(-20deg);
+      pointer-events: none;
+    }
+
+    .phone-stack {
+      position: relative;
+      width: 240px;
+      height: 480px;
+    }
+
+    .phone {
+      position: absolute;
+      width: 220px;
+      background: var(--white);
+      border: 2px solid var(--ink);
+      border-radius: 32px;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .phone-main {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .phone-back {
+      left: 50%;
+      top: 50%;
+      transform: translate(-30%, -40%) rotate(8deg);
+      z-index: 1;
+      box-shadow: 4px 4px 0 #aaa;
+      opacity: 0.6;
+    }
+
+    .phone-screen {
+      background: var(--cream);
+      padding: 0;
+      height: 100%;
+    }
+
+    .phone-notch {
+      background: var(--ink);
+      height: 28px;
+      border-radius: 0 0 16px 16px;
+      width: 80px;
+      margin: 0 auto;
+    }
+
+    .phone-content {
+      padding: 16px 12px;
+    }
+
+    .phone-header {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    .phone-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+    }
+
+    .phone-tab {
+      font-family: 'DM Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      border: 1.5px solid var(--ink);
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .phone-tab.active {
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .phone-card {
+      background: var(--white);
+      border: 1.5px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+
+    .phone-card-badge {
+      font-size: 7px;
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      margin-bottom: 6px;
+      display: inline-block;
+      color: var(--ink);
+    }
+
+    .phone-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .phone-card-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 8px;
+      color: #999;
+    }
+
+    .phone-rabbit {
+      background: var(--ink);
+      border: 1.5px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--tech);
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+
+    .phone-rabbit-label {
+      font-size: 7px;
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: var(--tech);
+      padding: 2px 6px;
+      margin-bottom: 6px;
+      display: inline-block;
+      color: var(--ink);
+    }
+
+    .phone-rabbit-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--cream);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      background: var(--ink);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-block;
+      animation: marquee 18s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 3px;
+      color: var(--cream);
+      margin-right: 48px;
+    }
+
+    .marquee-item span {
+      color: var(--tech);
+      margin-right: 48px;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 80px 40px;
+    }
+
+    .features-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .features-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 90px);
+      line-height: 0.9;
+      letter-spacing: 1px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 2px solid var(--ink);
+    }
+
+    .feature-card {
+      padding: 32px;
+      border-right: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      transition: background 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      background: var(--paper);
+    }
+
+    .feature-card:nth-child(3n) { border-right: none; }
+    .feature-card:nth-last-child(-n+3) { border-bottom: none; }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--ink);
+      border: 2px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+      box-shadow: 3px 3px 0 var(--tech);
+    }
+
+    .feature-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .feature-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #666;
+    }
+
+    /* ── CATEGORIES ── */
+    .categories {
+      padding: 80px 40px;
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .categories-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 90px);
+      line-height: 0.9;
+      letter-spacing: 1px;
+      color: var(--cream);
+      margin-bottom: 48px;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .cat-card {
+      border: 2px solid rgba(255,255,255,0.2);
+      padding: 24px;
+      position: relative;
+      transition: border-color 0.15s, transform 0.1s;
+    }
+
+    .cat-card:hover {
+      border-color: var(--cream);
+      transform: translate(-2px, -2px);
+    }
+
+    .cat-dot {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--cream);
+      margin-bottom: 16px;
+    }
+
+    .cat-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 1px;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+
+    .cat-sources {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.8;
+    }
+
+    .cat-count {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: rgba(255,255,255,0.08);
+      line-height: 1;
+    }
+
+    /* ── HOW TO INSTALL ── */
+    .install {
+      padding: 80px 40px;
+    }
+
+    .install-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 90px);
+      line-height: 0.9;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .install-subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 56px;
+      max-width: 500px;
+      line-height: 1.8;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 2px solid var(--ink);
+      margin-bottom: 48px;
+    }
+
+    .step {
+      padding: 32px 28px;
+      border-right: 2px solid var(--ink);
+      position: relative;
+    }
+
+    .step:last-child { border-right: none; }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px;
+      line-height: 1;
+      color: var(--ink);
+      opacity: 0.08;
+      position: absolute;
+      top: 16px;
+      right: 20px;
+    }
+
+    .step-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 16px;
+      box-shadow: 3px 3px 0 var(--security);
+    }
+
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #666;
+    }
+
+    .step-desc code {
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      padding: 1px 5px;
+      font-size: 11px;
+    }
+
+    .download-box {
+      background: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-lg);
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .download-info { flex: 1; }
+
+    .download-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 1px;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+
+    .download-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .download-meta span {
+      color: var(--tech);
+      margin-right: 16px;
+    }
+
+    .btn-download-big {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: var(--tech);
+      border: 2px solid var(--cream);
+      padding: 18px 40px;
+      text-decoration: none;
+      box-shadow: 5px 5px 0 var(--cream);
+      transition: transform 0.1s, box-shadow 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .btn-download-big:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0 var(--cream);
+    }
+
+    .btn-download-big:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--cream);
+    }
+
+    /* ── WARNING BOX ── */
+    .warning-box {
+      border: 2px solid var(--culture);
+      background: rgba(255,184,0,0.08);
+      padding: 20px 24px;
+      margin-top: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .warning-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .warning-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .warning-text strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: gap;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 3px;
+      color: var(--cream);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-link:hover { color: var(--tech); }
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 20px; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .hero-left {
+        padding: 48px 20px;
+        border-right: none;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .hero-right { display: none; }
+
+      .features, .install, .categories { padding: 48px 20px; }
+
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card { border-right: none !important; }
+      .feature-card:nth-last-child(-n+3) { border-bottom: 2px solid var(--ink); }
+      .feature-card:last-child { border-bottom: none; }
+
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+
+      .steps {
+        grid-template-columns: 1fr 1fr;
+      }
+      .step:nth-child(2) { border-right: none; }
+      .step:nth-child(2), .step:nth-child(3) {
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .download-box { flex-direction: column; }
+
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 72px; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .step { border-right: none !important; border-bottom: 2px solid var(--ink); }
+      .step:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">READER.</a>
+    <a href="https://github.com/Im-Kaycee/reader_app/releases/latest/download/reader-v1.0.apk" class="nav-download">↓ Download APK</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <span class="hero-tag">// Android App · Free · No Ads</span>
+      <h1 class="hero-title">YOUR<br><span>CORNER</span><br>OF THE<br>NET.</h1>
+      <p class="hero-subtitle">
+        Reader aggregates RSS feeds from tech, security, music, football, Nigerian news and more — into one fast, beautiful, offline-ready reading experience.
+      </p>
+      <div class="hero-cta-group">
+        <a href="https://github.com/Im-Kaycee/reader_app/releases/latest/download/reader-v1.0.apk" class="btn-primary">
+          ↓ Download Free
+        </a>
+        <a href="https://github.com/Im-Kaycee/reader_app" target="_blank" class="btn-secondary">
+          View Source
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">12+</span>
+          <span class="stat-label">RSS Feeds</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">6</span>
+          <span class="stat-label">Categories</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">19mb</span>
+          <span class="stat-label">App Size</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">0₦</span>
+          <span class="stat-label">Cost</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="phone-stack">
+        <!-- Back phone -->
+        <div class="phone phone-back" style="width:200px; height:420px;">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+          </div>
+        </div>
+        <!-- Main phone -->
+        <div class="phone phone-main" style="width:210px; height:440px;">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="phone-content">
+              <div class="phone-header">READER.</div>
+              <div class="phone-tabs">
+                <div class="phone-tab active">All</div>
+                <div class="phone-tab">Tech</div>
+                <div class="phone-tab">🇳🇬</div>
+                <div class="phone-tab">⚽</div>
+              </div>
+              <!-- Rabbit hole -->
+              <div class="phone-rabbit">
+                <div class="phone-rabbit-label">🕳️ Today's Rabbit Hole</div>
+                <div class="phone-rabbit-title">The invisible architecture powering every website you visit</div>
+              </div>
+              <!-- Cards -->
+              <div class="phone-card">
+                <div class="phone-card-badge" style="background:#00C896;">Ars Technica</div>
+                <div class="phone-card-title">Google quietly kills off another beloved product</div>
+                <div class="phone-card-meta">2h ago · 3 min read</div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-badge" style="background:#FF3B30; color:#fff;">Krebs</div>
+                <div class="phone-card-title">New ransomware targets Nigerian banks</div>
+                <div class="phone-card-meta">4h ago · 5 min read</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">Tech <span>✦</span></span>
+      <span class="marquee-item">Security <span>✦</span></span>
+      <span class="marquee-item">Music <span>✦</span></span>
+      <span class="marquee-item">Football <span>✦</span></span>
+      <span class="marquee-item">Nigeria <span>✦</span></span>
+      <span class="marquee-item">Offline <span>✦</span></span>
+      <span class="marquee-item">RSS <span>✦</span></span>
+      <span class="marquee-item">No Ads <span>✦</span></span>
+      <span class="marquee-item">Tech <span>✦</span></span>
+      <span class="marquee-item">Security <span>✦</span></span>
+      <span class="marquee-item">Music <span>✦</span></span>
+      <span class="marquee-item">Football <span>✦</span></span>
+      <span class="marquee-item">Nigeria <span>✦</span></span>
+      <span class="marquee-item">Offline <span>✦</span></span>
+      <span class="marquee-item">RSS <span>✦</span></span>
+      <span class="marquee-item">No Ads <span>✦</span></span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features reveal">
+    <div class="features-header">
+      <div>
+        <p class="section-label">// What it does</p>
+        <h2 class="features-title">BUILT<br>DIFFERENT.</h2>
+      </div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <div class="feature-name">RSS Aggregation</div>
+        <p class="feature-desc">Pulls from 12+ hand-picked RSS feeds across 6 categories. No algorithm. No ads. Just the feeds you chose.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📶</div>
+        <div class="feature-name">Offline Reading</div>
+        <p class="feature-desc">Articles cached locally for 7 days. Read on the bus, on a plane, underground. No connection needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🕳️</div>
+        <div class="feature-name">Rabbit Hole</div>
+        <p class="feature-desc">Every day, one article you'd normally scroll past gets surfaced. A long read. Something different.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔖</div>
+        <div class="feature-name">Bookmarks</div>
+        <p class="feature-desc">Save articles permanently. Bookmarks survive cache clears and live on the device forever.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔇</div>
+        <div class="feature-name">Mute Sources</div>
+        <p class="feature-desc">Toggle any source off from settings. Your feed, your rules. Mute preferences persist across restarts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-name">Full Search</div>
+        <p class="feature-desc">Search across all cached articles by title, source, or category. Instant results, no server needed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories reveal">
+    <p class="section-label" style="color:rgba(255,255,255,0.4);">// What you'll read</p>
+    <h2 class="categories-title">6 CATEGORIES.<br>YOUR INTERNET.</h2>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <div class="cat-dot" style="background:#00C896;"></div>
+        <div class="cat-name">TECH</div>
+        <div class="cat-sources">Hacker News · Ars Technica<br>The Verge</div>
+        <div class="cat-count">01</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-dot" style="background:#FF3B30;"></div>
+        <div class="cat-name">SECURITY</div>
+        <div class="cat-sources">Krebs on Security<br>BleepingComputer</div>
+        <div class="cat-count">02</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-dot" style="background:#8B5CF6;"></div>
+        <div class="cat-name">MUSIC</div>
+        <div class="cat-sources">Pitchfork</div>
+        <div class="cat-count">03</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-dot" style="background:#1A8F3C;"></div>
+        <div class="cat-name">FOOTBALL</div>
+        <div class="cat-sources">BBC Football · The Guardian<br>ESPN FC</div>
+        <div class="cat-count">04</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-dot" style="background:#008751;"></div>
+        <div class="cat-name">NIGERIA 🇳🇬</div>
+        <div class="cat-sources">Punch · Vanguard · The Cable<br>Premium Times · Channels TV</div>
+        <div class="cat-count">05</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-dot" style="background:#555;"></div>
+        <div class="cat-name">GENERAL</div>
+        <div class="cat-sources">BBC News · Reuters</div>
+        <div class="cat-count">06</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="install reveal" id="download">
+    <p class="section-label">// How to install</p>
+    <h2 class="install-title">GET IT ON<br>YOUR PHONE.</h2>
+    <p class="install-subtitle">
+      Reader is a free Android APK. No Play Store needed. Four steps and you're reading.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">↓</div>
+        <div class="step-title">Download the APK</div>
+        <p class="step-desc">Tap the download button below. The APK file will save to your phone's Downloads folder.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">⚙</div>
+        <div class="step-title">Allow Unknown Sources</div>
+        <p class="step-desc">Go to <code>Settings → Security → Install unknown apps</code> and allow your browser or file manager.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">📂</div>
+        <div class="step-title">Open the File</div>
+        <p class="step-desc">Open your Downloads folder, tap <code>reader-v1.apk</code> and hit Install when prompted.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon">📖</div>
+        <div class="step-title">Start Reading</div>
+        <p class="step-desc">Open Reader from your home screen. Pull down to load your feeds. You're in.</p>
+      </div>
+    </div>
+
+    <div class="download-box">
+      <div class="download-info">
+        <div class="download-title">READER V1.0</div>
+        <div class="download-meta">
+          <span>Android 5.0+</span>
+          <span>~19.5 MB</span>
+          <span>Free forever</span>
+          No account. No tracking. No ads.
+        </div>
+      </div>
+      <a href="https://github.com/Im-Kaycee/reader_app/releases/latest/download/reader-v1.apk" class="btn-download-big">
+        ↓ Download APK
+      </a>
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-icon">⚠️</div>
+      <div class="warning-text">
+        <strong>Android will show a security warning</strong> — this is normal for apps installed outside the Play Store.
+        Tap "Install anyway" to proceed. Reader contains no trackers, no ads, and no network requests outside of your RSS feeds.
+        You can <a href="https://github.com/Im-Kaycee/reader_app" style="color:var(--ink);">read the full source code on GitHub</a>.
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">READER.</div>
+    <div class="footer-links">
+      <a href="https://github.com/Im-Kaycee/reader_app" target="_blank" class="footer-link">GitHub</a>
+      <a href="https://github.com/Im-Kaycee/reader_app/releases" target="_blank" class="footer-link">Releases</a>
+      <a href="https://github.com/Im-Kaycee/reader_app/issues" target="_blank" class="footer-link">Report a Bug</a>
+    </div>
+    <div class="footer-copy">Built with Flutter · Open Source · Free</div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
